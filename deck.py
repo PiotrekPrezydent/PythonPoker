@@ -1,41 +1,24 @@
-from card import *
 import random
+from card import Card
 
-
-class deck:
+class Deck:
     def __init__(self):
-        self.cards = []
-        colors = ["spades","hearts","diamonds","clubs"]
-        ranks = ["ace","2","3","4","5","6","7","8","9","10","jack","queen","king"]
-        for rank in ranks:
-            for color in colors:
-                self.cards.append(card(rank,color))
-        pass
+        self.cards = [Card(rank, suit) for suit in Card.suits for rank in Card.ranks]
+        self.discard_pile = []
 
     def shuffle(self):
-        if self.cards == []:
-            print("deck is empty")
-            return
-        
         random.shuffle(self.cards)
-        pass
 
-    def print_cards(self):
-        if self.cards == []:
-            print("deck is empty")
-            return
-        
-        for card in self.cards:
-            card.show()
+    def draw(self):
+        return self.cards.pop()
 
-        pass
+    def discard_to_bottom(self, card):
+        self.cards.insert(0, card)
 
-    def take_cards(self, number) -> list:
-        returned = []
-        for i in range(0,number):
-            returned.append(self.cards.pop)
-        return returned
+    def deal(self, players, num_cards=5):
+        for _ in range(num_cards):
+            for player in players:
+                player.hand.append(self.draw())
 
-    def store_cards(self, cards):
-        self.cards.insert(cards)
-        pass
+    def __str__(self):
+        return f"Deck with {len(self.cards)} cards remaining."
