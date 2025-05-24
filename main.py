@@ -1,11 +1,23 @@
-from deck import Deck
-from player import Player
+from game_logic.deck import Deck
+from game_logic.player import Player
+from gameplay.engine import GameEngine
 
-deck = Deck()
-deck.shuffle()
+def main():
+    print("Witaj w Pokerze 5-kartowym!")
+    names = ["Ty", "Bot1", "Bot2", "Bot3"]
+    players = Player.create_players(names, human_index=0)
+    deck = Deck()
+    engine = GameEngine(players, deck)
 
-players = [Player("Alice"), Player("Bob")]
-deck.deal(players, 5)
+    while True:
+        engine.play_round()
+        print("\nStan żetonów:")
+        for p in players:
+            print(f"{p.name}: {p.stack} żetonów")
+        cont = input("\nZagraj kolejną rundę? (t/n): ").lower()
+        if cont != 't':
+            print("Dziękujemy za grę!")
+            break
 
-for player in players:
-    print(f"{player.name}'s hand: {player.show_hand()}")
+if __name__ == "__main__":
+    main()
